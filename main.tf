@@ -21,12 +21,22 @@ resource "minio_bucket" "bucket" {
 }
 
 # Create a policy.
+# User de NF, pode ver o bucket, fazer upload e donwload apenas para esse bucket.
 resource "minio_canned_policy" "policy1" {
   name = "policy1"
   policy = <<EOT
 {
     "Version": "2012-10-17",
     "Statement": [
+        {
+            "Effect": "Deny",
+            "Action": [
+                "s3:ListAllMyBuckets"
+            ],
+            "Resource": [
+                "arn:aws:s3:::*"
+            ]
+        },
         {
             "Effect": "Allow",
             "Action": [
@@ -47,17 +57,6 @@ resource "minio_canned_policy" "policy1" {
             ],
             "Resource": [
                 "arn:aws:s3:::bucket1/*"
-            ]
-        },
-        {
-            "Effect": "Deny",
-            "Action": [
-                "s3:ListBucket",
-                "s3:GetBucketLocation",
-                "s3:ListAllMyBuckets"
-            ],
-            "Resource": [
-                "*"
             ]
         }
     ]
