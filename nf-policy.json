@@ -21,7 +21,7 @@
                 "s3:GetBucketLocation"
             ],
             "Resource": [
-                "arn:aws:s3:::bucket1"
+                "arn:aws:s3:::my-test-bucket"
             ]
         },
         {
@@ -33,7 +33,7 @@
                 "s3:AbortMultipartUpload"
             ],
             "Resource": [
-                "arn:aws:s3:::bucket1/*"
+                "arn:aws:s3:::my-test-bucket/*"
             ]
         }
     ]
