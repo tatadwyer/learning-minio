@@ -9,7 +9,7 @@ terraform {
 }
 
 provider "minio" {
-    endpoint = "localhost:9000"
+    endpoint = "192.168.0.10:9000"
     access_key = "adminio"
     secret_key = "adminio"
     #ssl = false
@@ -17,13 +17,13 @@ provider "minio" {
 
 # Create a bucket.
 resource "minio_bucket" "bucket" {
-  name = "bucket1"
+  name = "my-test-bucket"
 }
 
 # Create a policy.
 # User de NF, pode ver o bucket, fazer upload e donwload apenas para esse bucket.
-resource "minio_canned_policy" "policy1" {
-  name = "policy1"
+resource "minio_canned_policy" "nf-policy" {
+  name = "nf-policy"
   policy = <<EOT
 {
     "Version": "2012-10-17",
@@ -31,6 +31,8 @@ resource "minio_canned_policy" "policy1" {
         {
             "Effect": "Deny",
             "Action": [
+                "s3:ListBucket",
+                "s3:GetBucketLocation",
                 "s3:ListAllMyBuckets"
             ],
             "Resource": [
@@ -44,7 +46,7 @@ resource "minio_canned_policy" "policy1" {
                 "s3:GetBucketLocation"
             ],
             "Resource": [
-                "arn:aws:s3:::bucket1"
+                "arn:aws:s3:::my-test-bucket"
             ]
         },
         {
@@ -56,7 +58,7 @@ resource "minio_canned_policy" "policy1" {
                 "s3:AbortMultipartUpload"
             ],
             "Resource": [
-                "arn:aws:s3:::bucket1/*"
+                "arn:aws:s3:::my-test-bucket/*"
             ]
         }
     ]
